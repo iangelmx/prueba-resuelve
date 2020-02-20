@@ -19,8 +19,40 @@
 import json
 
 
-def read_input_players():
-    pass
+def read_input_players() -> dict:
+    """
+    Process that read from the std input a JSON to calculate the salary of the players received
+    This receives an string like:
+    [  
+        {  
+            "nombre":"Juan Perez",
+            "nivel":"C",
+            "goles":10,
+            "sueldo":50000,
+            "bono":25000,
+            "sueldo_completo":null,
+            "equipo":"rojo"
+        }, ...
+    ]
+
+    And this return a dict of the input received.
+    """
+    arreglo_json = ""
+    renglon = input("Dame la entrada del JSON, se detendrá la lectura en EOF\n")
+    while True:
+        arreglo_json += renglon
+        try:
+            renglon = input("")
+        except EOFError:
+            print("JSON Recibido.")
+            break
+    
+    try:
+        entrada = json.loads( arreglo_json )
+        return entrada
+    except Exception as ex:
+        print("Fatal error: La entrada del JSON de jugadores no tiene un formato válido de JSON. \nDetails:", ex)
+        return None
 
 def get_team_compliance():
     pass
@@ -34,8 +66,13 @@ def get_levels_of_team():
 def calculate_player_bonus():
     pass
 
-def get_players_salary():
-    pass
+def get_players_salary(input_data:str) -> str:
+    print(input_data)
 
 if __name__ == "__main__":
-    get_players_salary()
+    #Read the input data
+    input_data = read_input_players()
+    while input_data is None:
+        print("Intente ingresarlo nuevamente...")
+        input_data = read_input_players()
+    get_players_salary(input_data)

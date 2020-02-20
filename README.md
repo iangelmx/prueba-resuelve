@@ -66,3 +66,12 @@ El programa funcionará bajo un diseño funcional, puesto que no requiere de may
  4. **Calcular el bono de un jugador**: Es el proceso que recibirá el JSON que representa a un jugador y calculará su sueldo completo.
  5. **Calcular el alcance individual de un jugador**: Es el proceso que con base en los goles anotados y al nivel del jugador, regresará el porcentaje de alcance obtenido por el jugador.
  6. **Calcular el alcance por equipo**: Es el proceso que con base en los goles anotados y niveles de los jugadores del equipo, calculará y retornará el alcance del equipo.
+
+
+### Descripción del flujo de datos en los métodos:
+
+
+|Entrada                 |Módulo                          |Salida|
+|----------------|-------------------------------|-----------------------------|
+|*-JSON con los datos de los jugadores* : ***dict*** | `get_players_salary()` | JSON con el sueldo_completo calculado de los jugadores : ***str*** |
+|*Cadena con el JSON de entrada* : ***str*** | `read_input_players()` | JSON transformado a diccionario de Python : ***dict*** |
