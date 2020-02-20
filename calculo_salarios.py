@@ -57,8 +57,46 @@ def read_input_players() -> dict:
 def get_team_compliance():
     pass
 
-def get_individual_compliance():
-    pass
+def get_individual_compliance(player : dict, min_goals_level : int) -> float:
+    """
+    Process that calculates the individual compliance of a player.
+    Receive a dict of player like:
+    {  
+        "nombre":"Juan Perez",
+        "nivel":"C",
+        "goles":10,
+        "sueldo":50000,
+        "bono":25000,
+        "sueldo_completo":null,
+        "equipo":"rojo"
+    }
+    AND the minimum goals that the player has to score : int
+
+    Return compliance : float
+    """
+    real_goals = player.get('goles', None)
+    if real_goals is None:
+        return {'ok' : False, 'description_error':f'No hay registro de goles para el jugador: {player}'}
+    
+    bonus = player.get('bono', None)
+    if bonus is None:
+        return {'ok' : False, 'description_error':f'El jugador no tiene un bono asignado: {player}'}
+
+    team_player = player.get('equipo', None)
+    if team_player is None:
+        return {'ok' : False, 'description_error':f'Nombre de equipo inesperado para el jugador: {player}'}
+
+    if min_goals_level is None:
+        return {'ok' : False, 'description_error':f'El jugador pertenece a un nivel sin goles mínimos: {player}'}
+    
+    
+    individual_compliance = 0
+    if real_goals > min_goals_level:
+        individual_compliance = 100
+    else:
+        individual_compliance = (100*real_goals) / min_goals_level
+    
+    return individual_compliance
 
 def get_levels_of_team():
     pass
@@ -68,6 +106,8 @@ def calculate_player_bonus():
 
 def get_players_salary(input_data:str) -> str:
     print(input_data)
+
+    print(get_individual_compliance(input_data[0], 20))
 
 if __name__ == "__main__":
     #Read the input data

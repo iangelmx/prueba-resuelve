@@ -74,4 +74,5 @@ El programa funcionará bajo un diseño funcional, puesto que no requiere de may
 |Entrada                 |Módulo                          |Salida|
 |----------------|-------------------------------|-----------------------------|
 |*-JSON con los datos de los jugadores* : ***dict*** | `get_players_salary()` | JSON con el sueldo_completo calculado de los jugadores : ***str*** |
-|*Cadena con el JSON de entrada* : ***str*** | `read_input_players()` | JSON transformado a diccionario de Python : ***dict*** |
+|*-Cadena con el JSON de entrada* : ***str*** | `read_input_players()` | JSON transformado a diccionario de Python : ***dict*** |
+|*-JSON del jugador* : ***dict*** *-Goles mínimos para el nivel del jugador* : ***int***| `get_individual_compliance()` |Alcance del jugador : ***float*** |
