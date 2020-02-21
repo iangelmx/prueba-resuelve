@@ -54,7 +54,7 @@ def read_input_players() -> dict:
 		print("Fatal error: La entrada del JSON de jugadores no tiene un formato válido de JSON. \nDetails:", ex)
 		return None
 
-def get_team_compliance(players, levels_goals):
+def get_team_compliance(players :dict, levels_goals:dict) -> float:
 	"""
 	Process that from the levels and minimum goals return a dict with the compliance by team
 	Receives a dict player and a dict list of levels:
@@ -74,7 +74,7 @@ def get_team_compliance(players, levels_goals):
 	compliance_team = {}
 
 	for jugador in players:
-		team = jugador.get('equipo', None)
+		team = jugador.get('equipo')
 		
 		goal_level = levels_goals.get( jugador.get('nivel'), 0)
 		goals_scored = jugador.get('goles', 0)
@@ -100,7 +100,7 @@ def get_team_compliance(players, levels_goals):
 	#print("Cumplimiento equipo:", compliance_team)
 	return compliance_team
 
-def get_individual_compliance(player : dict, min_goals_level : int) -> float:
+def get_individual_compliance(player : dict, min_goals_level : int) -> dict:
 	"""
 	Process that calculates the individual compliance of a player.
 	Receive a dict of player like:
@@ -117,18 +117,10 @@ def get_individual_compliance(player : dict, min_goals_level : int) -> float:
 
 	Return compliance : float
 	"""
-	real_goals = player.get('goles', None)
+	real_goals = player.get('goles')
 	if real_goals is None:
 		return {'ok' : False, 'description_error':f'No hay registro de goles para el jugador: {player}'}
 	
-	bonus = player.get('bono', None)
-	if bonus is None:
-		return {'ok' : False, 'description_error':f'El jugador no tiene un bono asignado: {player}'}
-
-	team_player = player.get('equipo', None)
-	if team_player is None:
-		return {'ok' : False, 'description_error':f'Nombre de equipo inesperado para el jugador: {player}'}
-
 	if min_goals_level is None:
 		return {'ok' : False, 'description_error':f'El jugador pertenece a un nivel sin goles mínimos: {player}'}
 	
@@ -139,9 +131,9 @@ def get_individual_compliance(player : dict, min_goals_level : int) -> float:
 	else:
 		individual_compliance = (100*real_goals) / min_goals_level
 	
-	return individual_compliance
+	return {'ok': True, 'description':{'value':individual_compliance}}
 
-def get_levels_of_team():
+def get_levels_of_team() -> dict:
 	"""
 	Return the levels in a dict way from a dict list
 	{
@@ -171,16 +163,55 @@ def get_levels_of_team():
 		levels[ level['nivel'] ] = level['goles_min']
 	return levels
 
-def calculate_player_bonus():
-	pass
+def calculate_player_bonus(player:dict, min_goals_level:int, compliance_teams:dict) -> dict:
+	"""
+	This is the process to calculate de salary of individual player
+	Receive a JSON of the player like:
+	player <- {  
+		"nombre":"Juan Perez",
+		"nivel":"C",
+		"goles":10,
+		"sueldo":50000,
+		"bono":25000,
+		"sueldo_completo":null,
+		"equipo":"rojo"
+	}
+	"""
+
+	bonus = player.get('bono')
+	if bonus is None:
+		return {'ok' : False, 'description_error':f'El jugador no tiene un bono asignado: {player}'}
+
+	team_player = player.get('equipo')
+	if team_player is None:
+		return {'ok' : False, 'description_error':f'Nombre de equipo inesperado para el jugador: {player}'}
+
+	individual_compliance = get_individual_compliance(player, min_goals_level)
+	if individual_compliance.get('ok') in [False, None]:
+		print(f"Error while calculating individual compliance with:{player}\nDetalles: {individual_compliance.get('description')}")
+		return {'ok':False, 'description': individual_compliance.get('description') }
+	
+	individual_compliance = individual_compliance.get('description', {}).get('value',0)
+	
+	team_compliance = compliance_teams.get( team_player, {}  ).get('compliance', 0)
+	final_compliance = (individual_compliance + team_compliance)/2
+
+	final_bonus = bonus * (final_compliance/100)
+	
+	return {'ok':True, 'description': {'value':final_bonus} }
 
 def get_players_salary(input_data:dict) -> str:
 	print(input_data)
 
-	print(get_individual_compliance(input_data[0], 20))
+	print(get_individual_compliance(input_data[0], 15))
 
 	levels_goals = get_levels_of_team()
-	print(get_team_compliance(input_data, levels_goals))
+	a = get_team_compliance(input_data, levels_goals)
+	print(a)
+	
+	min_goals = levels_goals.get('rojo', None)
+
+	print(calculate_player_bonus( input_data[0], 15, a ))
 
 if __name__ == "__main__":
 	#Read the input data
