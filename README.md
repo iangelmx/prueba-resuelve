@@ -74,9 +74,9 @@ El programa funcionará bajo un diseño funcional, puesto que no requiere de may
 |Entrada                 |Módulo                          |Salida|
 |----------------|-------------------------------|-----------------------------|
 |*-JSON con los datos de los jugadores* : ***dict*** | `get_players_salary()` | JSON con el sueldo_completo calculado de los jugadores : ***str*** |
-|*-Cadena con el JSON de entrada* : ***str*** | `read_input_players()` | JSON transformado a diccionario de Python : ***dict*** |
+|*-Cadena con el JSON de entrada* : ***str*** | `read_input()` | JSON transformado a diccionario de Python : ***dict*** |
 |*-JSON del jugador* : ***dict*** *-Goles mínimos para el nivel del jugador* : ***int***| `get_individual_compliance()` |Alcance del jugador : ***float*** |
-| ------ | `get_levels_of_team()` | Diccionario formateado de los niveles y goles mínimos : ***dict*** | 
+|*-Cadena con el JSON de entrada de niveles* : ***str***| `get_levels_of_team()` | Diccionario formateado de los niveles y goles mínimos : ***dict*** | 
 |*-JSON de los jugadores : **dict** -Niveles y goles mínimos del Resuelve FC :* ***dict***| `get_team_compliance()` | Cumplimiento del equipo : ***float*** |
 | *-JSON del jugador* : ***dict***. -*Goles minimos* : ***int***. *-Alcance del equipo* : ***float*** | `calculate_player_bonus()` | Diccionario con el bono final del jugador : ***dict*** | 
 |*-JSON con los datos de los jugadores* : ***dict***| `get_players_salary()` | JSON con el sueldo_completo calculado de los jugadores : ***str***|

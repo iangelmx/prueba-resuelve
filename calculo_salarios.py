@@ -16,13 +16,11 @@
 # https://github.com/iangelmx/solucion-prueba-resuelve
 # -----------------------------------------------------------
 
-import json
 
-
-def read_input_players() -> dict:
+def read_input(json_input=None) -> dict:
 	"""
 	Process that read from the std input a JSON to calculate the salary of the players received
-	This receives an string like:
+	This read from the std input/receives an string like:
 	[  
 		{  
 			"nombre":"Juan Perez",
@@ -37,22 +35,32 @@ def read_input_players() -> dict:
 
 	And this return a dict of the input received.
 	"""
-	arreglo_json = ""
-	renglon = input("Dame la entrada del JSON, se detendrá la lectura en EOF\n")
-	while True:
-		arreglo_json += renglon
+	import json
+
+	if json_input is not None:
 		try:
-			renglon = input("")
-		except EOFError:
-			print("JSON Recibido.")
-			break
-	
-	try:
-		entrada = json.loads( arreglo_json )
-		return entrada
-	except Exception as ex:
-		print("Fatal error: La entrada del JSON de jugadores no tiene un formato válido de JSON. \nDetails:", ex)
-		return None
+			entrada = json.loads( json_input )
+			return entrada
+		except Exception as ex:
+			print("Fatal error: json_input no tiene un formato válido de JSON. \nDetails:", ex)
+			return None
+	else:
+		arreglo_json = ""
+		renglon = input("Dame la entrada del JSON, se detendrá la lectura en EOF\n")
+		while True:
+			arreglo_json += renglon
+			try:
+				renglon = input("")
+			except EOFError:
+				print("JSON Recibido.")
+				break
+		
+		try:
+			entrada = json.loads( arreglo_json )
+			return entrada
+		except Exception as ex:
+			print("Fatal error: La entrada del JSON de jugadores no tiene un formato válido de JSON. \nDetails:", ex)
+			return None
 
 def get_team_compliance(players :dict, levels_goals:dict) -> float:
 	"""
@@ -133,32 +141,39 @@ def get_individual_compliance(player : dict, min_goals_level : int) -> dict:
 	
 	return {'ok': True, 'description':{'value':individual_compliance}}
 
-def get_levels_of_team() -> dict:
+def get_levels_of_team(levels_of_team=None) -> dict:
 	"""
+	In case of levels_of_team not None, receives a dict
+	list with the levels of the teams.
+
 	Return the levels in a dict way from a dict list
 	{
 		'level_x' : goles_min (integer)
 	}
 	"""
-	input_levels = [
-		{
-			'nivel':'A',
-			'goles_min' : 5
-		},
-		{
-			'nivel':'B',
-			'goles_min' : 10
-		},
-		{
-			'nivel':'C',
-			'goles_min' : 15
-		},
-		{
-			'nivel':'Cuauh',
-			'goles_min' : 20
-		}
-	]
 	levels = {}
+	if levels_of_team is not None:
+		input_levels = read_input( levels_of_team )
+	else:
+		input_levels = [
+			{
+				'nivel':'A',
+				'goles_min' : 5
+			},
+			{
+				'nivel':'B',
+				'goles_min' : 10
+			},
+			{
+				'nivel':'C',
+				'goles_min' : 15
+			},
+			{
+				'nivel':'Cuauh',
+				'goles_min' : 20
+			}
+		]
+		
 	for level in input_levels:
 		levels[ level['nivel'] ] = level['goles_min']
 	return levels
@@ -212,6 +227,7 @@ def get_players_salary(input_data:dict, traceback = False) -> str:
 		}
 	]
 	"""
+	import json
 	
 	#Getting the levels of the Resuelve FC
 	levels_goals = get_levels_of_team()
@@ -271,10 +287,10 @@ def get_players_salary(input_data:dict, traceback = False) -> str:
 
 if __name__ == "__main__":
 	#Read the input data
-	input_data = read_input_players()
+	input_data = read_input(json_input=None)
 	while input_data is None:
 		print("Intente ingresarlo nuevamente...")
-		input_data = read_input_players()
+		input_data = read_input()
 	
 	# Se obtiene el salario de los jugadores
 	# El JSON de salida en formato STR está en la variable salario_jugadores
