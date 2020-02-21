@@ -80,3 +80,46 @@ El programa funcionará bajo un diseño funcional, puesto que no requiere de may
 |*-JSON de los jugadores : **dict** -Niveles y goles mínimos del Resuelve FC :* ***dict***| `get_team_compliance()` | Cumplimiento del equipo : ***float*** |
 | *-JSON del jugador* : ***dict***. -*Goles minimos* : ***int***. *-Alcance del equipo* : ***float*** | `calculate_player_bonus()` | Diccionario con el bono final del jugador : ***dict*** | 
 |*-JSON con los datos de los jugadores* : ***dict***| `get_players_salary()` | JSON con el sueldo_completo calculado de los jugadores : ***str***|
+
+ 
+# Arquitectura
+
+- La solución corre sobre Python en su versión 3.7.3 de 64 bits.
+- No requiere un entorno virtual, puesto que funciona con las librerías estándares del lenguaje Python
+- El proyecto sólo cuenta con 1 script (*calculo_salarios.py*), el cual ejecuta todos los procedimientos pertinentes para la resolución.
+
+```
+solucion-prueba-resuelve
+.
+|--	calculo_salarios.py
+|--	entrada_prueba.txt
+|--	LICENSE
+|--	README.md
+```
+
+
+## Librerías necesarias
+
+ 1. **json** (librería estándar del lenguaje Python)
+
+## Forma de probarlo
+
+### En entornos Linux
+Si se desea ejecutar en entornos Linux:
+Ejecutar el siguiente comando:
+`~/path_to_script $: python3 calcula_salarios.py < entrada_prueba.txt`
+### En entornos Windows
+Si se desea ejecutar en entornos de MS Windows:
+Ejecutar el siguiente comando desde el símbolo de sistema:
+`C:\path_to_script>python calcula_salarios.py < entrada_prueba.txt`
+
+Con el operador '<', redirigimos la entrada estándar de teclado para que lea el archivo de entrada_prueba.txt
+
+# Notas para paso a producción
+
+ - Se procuró no tener dependencias de variables globales ni de librerías. Todas ellas son creadas y/o invocadas dentro de cada método que las requiera
+ - Los módulos pueden funcionar de forma independiente, sin embargo, para obtener el resultado deseado, **se recomienda mantener todos los módulos incluidos dentro de `calcula_salarios.py`**
+ - El módulo **read_input()** puede leer el JSON de entrada de los jugadores desde la entrada estándar de teclado. Sin embargo, si la solución creada se integrará a un sistema continuo que entregará dicho JSON en tiempo de ejecución, se podrá colocar dicho JSON en formato de ***string*** como argumento de **read_input()** de la siguiente forma: **`read_input(json_entrada)`** Y funcionará sin ningún problema el programa. Lo mismo sucede con ***get_levels_of_team()***
+ - Se podrá recoger la salida con los JSON requisitados a la salida del método **get_players_salary(*json_dict_entrada*)**
+ - Se otorga libertad de edición al personal que vaya a pasarlo a producción, sin embargo, no se garantiza el correcto funcionamiento del programa una vez que ha sido intervenido por terceras personas.
+ - Se reitera que su servidor apoyará al momento de hacer la integración a producción.
